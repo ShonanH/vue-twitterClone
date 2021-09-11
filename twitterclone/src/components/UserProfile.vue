@@ -67,7 +67,7 @@ export default {
 <style lang="scss" scoped>
 .user-profile {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 4fr;
   grid-gap: 50px;
   // width: 85%;
   padding: 50px 5%;
