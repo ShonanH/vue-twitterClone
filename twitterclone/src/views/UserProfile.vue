@@ -15,50 +15,46 @@
 
     <div class="user-profile__tweets-wrapper">
       <TweetItem
-        v-for="t in state.user.tweets"
-        :key="t.id"
+        v-for="tweet in state.user.tweets"
+        :key="tweet.id"
         :username="state.user.username"
-        :tweet="t"
+        :tweet="tweet"
       />
     </div>
   </div>
 </template>
 
 <script>
-import TweetItem from "./TweetItem";
-import CreateTweetPanel from "./CreateTweetPanel";
-import { reactive } from "vue";
+import TweetItem from "../components/TweetItem";
+import CreateTweetPanel from "../components/CreateTweetPanel";
+import { reactive, computed } from "vue";
+import { useRoute } from "vue-router";
+import { users } from "../assets/users";
 
 export default {
   name: "UserProfile",
   components: { TweetItem, CreateTweetPanel },
   setup() {
+    const route = useRoute();
+    const userId = computed(() => route.params.userId);
+
     const state = reactive({
       followers: 0,
-      user: {
-        id: 1,
-        username: "leakyplunder",
-        firstName: "Shonan",
-        lastName: "Hendre",
-        email: "shonanhendre@gmail.com",
-        isAdmin: true,
-        tweets: [
-          { id: 1, content: "Twitter-Clone is amazing!" },
-          { id: 2, content: "Nice Twitter-Clone bro!" },
-        ],
-      },
+      user: users[userId.value - 1] || users[0],
     });
 
-    function addTweet(t) {
+    function addTweet(tweet) {
+      console.log(state.user.id);
       state.user.tweets.unshift({
-        id: this.user.tweets.length + 1,
-        content: t,
+        id: state.user.tweets.length + 1,
+        content: tweet,
       });
     }
 
     return {
       state,
       addTweet,
+      userId,
     };
   },
 };
@@ -67,7 +63,7 @@ export default {
 <style lang="scss" scoped>
 .user-profile {
   display: grid;
-  grid-template-columns: 1fr 3fr;
+  grid-template-columns: 1fr 4fr;
   grid-gap: 50px;
   // width: 85%;
   padding: 50px 5%;
